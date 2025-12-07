@@ -23,28 +23,23 @@
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Make Prettier</ButtonText>
+          <CanonicalName>.PrettierX64.MakePrettier</CanonicalName>
         </Strings>
       </Button>
     </Buttons>
   </Commands>
 
   <KeyBindings>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="TypeScriptEditor"/>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="JavaScriptEditor"/>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LegacyJavaScriptEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="guidVSStd97"/>
   </KeyBindings>
 
   <Symbols>
-    <GuidSymbol name="guidPrettierPackage" value="{9c23598a-3625-4542-8488-a3777c7dac01}" />
+    <GuidSymbol name="guidPrettierPackage" value="{ef0c71c2-4568-443f-a0e5-e8490aeff5eb}" />
 
-    <GuidSymbol name="guidPrettierPackageCmdSet" value="{1adbe5b8-de7d-446c-85d6-c1c121aacff3}">
+    <GuidSymbol name="guidPrettierPackageCmdSet" value="{3afdacda-dc22-4a63-9c5f-e9c0520276e1}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="PrettierCommandId" value="0x0100" />
     </GuidSymbol>
 
-    <!-- Existing editor guids -->
-    <GuidSymbol name="TypeScriptEditor" value="{0f2454b1-a556-402d-a7d0-1fde7f99dee0}" />
-    <GuidSymbol name="JavaScriptEditor" value="{14d17961-fe51-464d-9111-c4af11d7d99a}" />
-    <GuidSymbol name="LegacyJavaScriptEditor" value="{8B382828-6202-11d1-8870-0000F87579D2}" />
   </Symbols>
 </CommandTable>

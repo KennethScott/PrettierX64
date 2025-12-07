@@ -1,19 +1,19 @@
-# JavaScript Prettier
+# Prettier x64
 
-[![Build status](https://ci.appveyor.com/api/projects/status/t38jbrjn8akd2jla?svg=true)](https://ci.appveyor.com/project/madskristensen/javascriptprettier)
+[![Build status](https://ci.appveyor.com/api/projects/status/t38jbrjn8akd2jla?svg=true)](https://ci.appveyor.com/project/madskristensen/PrettierX64)
 
-Download this extension from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.JavaScriptPrettier)
+Download this extension from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.PrettierX64)
 or get the [CI build](http://vsixgallery.com/extension/J1da7ad9e-85b3-4a0c-8e45-b2ae59a575a7/).
 
 ---------------------------------------
 
-Prettier is an opinionated JavaScript formatter inspired by refmt with advanced support for language features from ES2017, JSX, TypeScript and Flow. It removes all original styling and ensures that all outputted JavaScript conforms to a consistent style.
+Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 
 See the [change log](CHANGELOG.md) for changes and road map.
 
 ## Features
 
-- Prettifies JavaScript or TypeScript files
+- Prettifies JavaScript, TypeScript, JSON, CSS/SCSS/LESS, HTML, Markdown files
 - Uses [Prettier](https://github.com/jlongster/prettier) node module
     - If a version of Prettier can be found installed via npm locally (relative to the current file), it will be used.
     - If no local Prettier installation is found, the extension falls back to an embedded Prettier.
@@ -53,11 +53,6 @@ Invoke the command from the context menu in the JavaScript editor.
 
 ### FAQ
 
-#### Updating from 1.1 to 2.0
-Depending on your Visual Studio Configuration, you might experience that 2.0's output differs from the one you got with 1.1.  
-
-Most likely it is the tab size that has been changed from 4 spaces to 2. Please read the configuration section below on details how to get 4 spaces as tabsize.
-
 #### Configuration via .prettierrc
 It is quite easy to setup Prettier to format a little bit differently, like having 4 spaces instead of 2 spaces per tab. 
 
@@ -83,23 +78,12 @@ Access extension settings within Visual Studio via Tools >>> Options, Prettier.
 2. Prettier version for embedded usage: 
     * If your solution does not have a local version of Prettier installed via npm, the extension will attempt to download and use the version noted here.
     * Extension will download a requested version once and reuse that now embedded Prettier install until the setting requests another version.
-    * If the version declared cannot be found via npm, the extension will revert to 2.2.1, a known good Prettier version.
-    * NOTE: To preserve legacy behavior, note that previous 2.x versions of this extension used Prettier 1.12.1.
+    * If the version declared cannot be found via npm, the extension will revert to 3.7.3.
 
 #### Can it use my bundled version of Prettier?
 Yes, the plugin will search for a locally (relative to the open file) installed Prettier version before falling back to its own version. 
 
 It does ***not*** currently support using a globally installed version of Prettier, and will use its embedded version instead.
-
-## Contribute
-Check out the [contribution guidelines](.github/CONTRIBUTING.md)
-if you want to contribute to this project.
-
-For cloning and building this project yourself, make sure
-to install the
-[Extensibility Tools 2015](https://visualstudiogallery.msdn.microsoft.com/ab39a092-1343-46e2-b0f1-6a3f91155aa6)
-extension for Visual Studio which enables some features
-used by this project.
 
 ## License
 [Apache 2.0](LICENSE)

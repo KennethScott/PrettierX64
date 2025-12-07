@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.OLE.Interop;
 using System;
 
-namespace JavaScriptPrettier
+namespace PrettierX64
 {
     abstract class BaseCommand : IOleCommandTarget
     {

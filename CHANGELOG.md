@@ -1,18 +1,15 @@
-# Road map
-
-- [ ] Document code in comments
-- [ ] Move strings to resource file
-- [ ] Execute on document save
-- [ ] Execute on document format
-
-Features that have a checkmark are complete and available for
-download in the
-[CI build](http://vsixgallery.com/extension/J1da7ad9e-85b3-4a0c-8e45-b2ae59a575a7/).
 
 # Change log
 
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
+
+## 3.0
+- [x] Renamed extension to Prettier x64 
+- [x] Updated for Visual Studio 2022 / 2026 x64 compatibility 
+- [x] prettier@latest is now the default if not installed locally
+- [x] Added support for additional content types (JSON, CSS/SCSS/LESS, HTML, Markdown files) 
+- [x] File extensions to include are now available in settings.
 
 ## 2.2
 - [x] Ability to request a specific version of Prettier for embedded execution.

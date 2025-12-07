@@ -1,25 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="J1da7ad9e-85b3-4a0c-8e45-b2ae59a575a7" Version="2.2" Language="en-US" Publisher="Mads Kristensen" />
-        <DisplayName>JavaScript Prettier</DisplayName>
-        <Description xml:space="preserve">Prettier is an opinionated JavaScript formatter inspired by refmt with advanced support for language features from ES2017, JSX, and Flow. It removes all original styling and ensures that all outputted JavaScript conforms to a consistent style.</Description>
-        <MoreInfo>https://github.com/madskristensen/JavaScriptPrettier</MoreInfo>
+        <Identity Id="d917daa5-aba6-4384-b082-9ccf9e8472f4" Version="1.0" Language="en-US" Publisher="Kenneth Scott" />
+        <DisplayName>Prettier x64</DisplayName>
+        <Description xml:space="preserve">Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.</Description>
+        <MoreInfo>https://github.com/kennethscott/PrettierX64</MoreInfo>
         <License>Resources\LICENSE</License>
-        <ReleaseNotes>https://github.com/madskristensen/JavaScriptPrettier/blob/master/CHANGELOG.md</ReleaseNotes>
+        <ReleaseNotes>https://github.com/kennethscott/PrettierX64/blob/master/CHANGELOG.md</ReleaseNotes>
         <Icon>Resources\Icon.png</Icon>
         <PreviewImage>Resources\Icon.png</PreviewImage>
         <Tags>JavaScript, JSX, TypeScript, TSX, EcmaScript, formatting</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,17.0)" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, )">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
     </Installation>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
-        <Prerequisite Id="Microsoft.VisualStudio.Component.Web" Version="[15.0,)" DisplayName="ASP.NET and web development tools" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0, )" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>

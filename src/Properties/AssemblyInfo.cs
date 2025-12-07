@@ -1,4 +1,4 @@
-﻿using JavaScriptPrettier;
+﻿using PrettierX64;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
