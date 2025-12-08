@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Shell;
@@ -29,9 +28,8 @@ namespace PrettierX64
     {
         internal static PrettierPackage Instance { get; private set; }
 
-        internal static NodeProcess _node;
+        internal NodeProcess Node { get; private set; }
 
-        internal DTE2 _dte;
         internal RunningDocumentTable _runningDocTable;
         internal OptionPageGrid optionPage;
 
@@ -50,16 +48,7 @@ namespace PrettierX64
 
             await base.InitializeAsync(cancellationToken, progress);
 
-            // Switch to the UI thread BEFORE touching DTE2
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
-            // Access DTE2 on the UI thread
-            _dte = await GetServiceAsync(typeof(EnvDTE.DTE)) as DTE2;
-            if (_dte == null)
-            {
-                Logger.Log("Failed to get DTE2 service.");
-                return;
-            }
 
             _runningDocTable = new RunningDocumentTable(this);
             _runningDocTable.Advise(new RunningDocTableEventsHandler(this));
@@ -67,9 +56,9 @@ namespace PrettierX64
             optionPage = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
             UpdateIncludedExtensions(optionPage.IncludedExtensions);
 
-            _node = new NodeProcess(this);
+            Node = new NodeProcess(this);
 
-            if (!_node.IsReadyToExecute())
+            if (!Node.IsReadyToExecute())
             {
                 // Fire-and-forget install with logging
                 JoinableTaskFactory
@@ -77,7 +66,7 @@ namespace PrettierX64
                     {
                         try
                         {
-                            await _node.EnsurePackageInstalledAsync().ConfigureAwait(false);
+                            await Node.EnsurePackageInstalledAsync().ConfigureAwait(false);
                         }
                         catch (Exception ex)
                         {

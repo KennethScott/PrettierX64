@@ -36,7 +36,7 @@ namespace PrettierX64
             _encoding = encoding;
             _filePath = filePath;
 
-            _node = PrettierPackage._node;
+            _node = PrettierPackage.Instance?.Node;
         }
 
         public override int Exec(

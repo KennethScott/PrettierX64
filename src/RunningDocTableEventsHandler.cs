@@ -1,5 +1,4 @@
 ﻿using System;
-using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -59,63 +58,40 @@ namespace PrettierX64
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_package.optionPage.FormatOnSave)
+            if (!_package.optionPage.FormatOnSave)
+                return VSConstants.S_OK;
+
+            RunningDocumentInfo docInfo = _package._runningDocTable.GetDocumentInfo(docCookie);
+
+            IVsTextView vsTextView = GetIVsTextView(docInfo.Moniker);
+            if (vsTextView == null)
+                return VSConstants.S_OK;
+
+            IWpfTextView wpfTextView = GetWpfTextView(vsTextView);
+            if (wpfTextView == null)
+                return VSConstants.S_OK;
+
+            if (
+                wpfTextView.Properties.TryGetProperty<PrettierCommand>(
+                    "prettierCommand",
+                    out PrettierCommand cmd
+                )
+            )
             {
-                RunningDocumentInfo docInfo = _package._runningDocTable.GetDocumentInfo(docCookie);
-                Logger.Log($"OnBeforeSave: {docInfo.Moniker}");
-
-                Document doc = null;
-                foreach (Document d in _package._dte.Documents)
-                {
-                    if (
-                        string.Equals(
-                            d.FullName,
-                            docInfo.Moniker,
-                            StringComparison.OrdinalIgnoreCase
-                        )
-                    )
-                    {
-                        doc = d;
-                        break;
-                    }
-                }
-
-                if (doc != null)
-                {
-                    IVsTextView vsTextView = GetIVsTextView(doc.FullName);
-                    if (vsTextView == null)
-                    {
-                        return VSConstants.S_OK;
-                    }
-
-                    IWpfTextView wpfTextView = GetWpfTextView(vsTextView);
-                    if (wpfTextView == null)
-                    {
-                        return VSConstants.S_OK;
-                    }
-
-                    if (
-                        wpfTextView.Properties.TryGetProperty<PrettierCommand>(
-                            "prettierCommand",
-                            out PrettierCommand cmd
-                        )
-                    )
-                    {
-                        Logger.Log("OnBeforeSave: invoking MakePrettierAsync via Run");
-                        ThreadHelper.JoinableTaskFactory.Run(() => cmd.MakePrettierAsync());
-                        Logger.Log("OnBeforeSave: MakePrettierAsync completed");
-                    }
-                    else
-                    {
-                        Logger.Log("OnBeforeSave: no PrettierCommand found for this view");
-                    }
-                }
+                ThreadHelper.JoinableTaskFactory.Run(() => cmd.MakePrettierAsync());
             }
+            else
+            {
+                Logger.Log("OnBeforeSave: no PrettierCommand found for this view");
+            }
+
             return VSConstants.S_OK;
         }
 
         private IVsTextView GetIVsTextView(string filePath)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             return VsShellUtilities.IsDocumentOpen(
                 _package,
                 filePath,
@@ -135,16 +111,13 @@ namespace PrettierX64
             if (!(vTextView is IVsUserData userData))
                 return null;
 
-            IWpfTextView view = null;
-            if (userData != null)
-            {
-                Guid guidViewHost = Microsoft.VisualStudio.Editor.DefGuidList.guidIWpfTextViewHost;
-                userData.GetData(ref guidViewHost, out object holder);
-                var viewHost = (IWpfTextViewHost)holder;
-                view = viewHost.TextView;
-            }
+            Guid guidViewHost = Microsoft.VisualStudio.Editor.DefGuidList.guidIWpfTextViewHost;
+            userData.GetData(ref guidViewHost, out object holder);
 
-            return view;
+            if (holder is IWpfTextViewHost viewHost)
+                return viewHost.TextView;
+
+            return null;
         }
     }
 }

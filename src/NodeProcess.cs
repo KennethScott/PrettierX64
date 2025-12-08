@@ -14,10 +14,11 @@ namespace PrettierX64
         private string _executable;
 
         private const string PrettierRelativePath = @"node_modules\prettier\bin\prettier.cjs";
-
-        // Fallback for older versions that use .js instead of .cjs
         private const string PrettierRelativePathFallback =
             @"node_modules\prettier\bin\prettier.js";
+
+        private const int PrettierTimeoutSeconds = 15;
+        private const int NpmTimeoutMinutes = 5;
 
         private string Packages
         {
@@ -61,7 +62,7 @@ namespace PrettierX64
 
             try
             {
-                return await InstallEmbeddedPrettierAsync().ConfigureAwait(false);
+                return await InstallEmbeddedPrettierAsync(isRetry: false).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -129,7 +130,7 @@ namespace PrettierX64
                     Task<string> stdErrTask = proc.StandardError.ReadToEndAsync();
 
                     Task<string[]> completionTask = Task.WhenAll(stdOutTask, stdErrTask);
-                    var timeoutTask = Task.Delay(TimeSpan.FromSeconds(15));
+                    var timeoutTask = Task.Delay(TimeSpan.FromSeconds(PrettierTimeoutSeconds));
 
                     Task finished = await Task.WhenAny(completionTask, timeoutTask)
                         .ConfigureAwait(false);
@@ -146,7 +147,7 @@ namespace PrettierX64
                             // ignore kill failures
                         }
 
-                        Logger.Log("Prettier timed out after 15 seconds.");
+                        Logger.Log($"Prettier timed out after {PrettierTimeoutSeconds} seconds.");
                         return null;
                     }
 
@@ -168,7 +169,7 @@ namespace PrettierX64
             }
         }
 
-        private async Task<bool> InstallEmbeddedPrettierAsync()
+        private async Task<bool> InstallEmbeddedPrettierAsync(bool isRetry)
         {
             if (!Directory.Exists(_installDir))
                 Directory.CreateDirectory(_installDir);
@@ -194,8 +195,10 @@ namespace PrettierX64
                 string error = installResult.Error ?? string.Empty;
 
                 // Handle ETARGET (invalid version) by falling back to the default version
+                // Only try this once to prevent infinite recursion
                 if (
-                    error.Contains("code ETARGET")
+                    !isRetry
+                    && error.Contains("code ETARGET")
                     && !_package.optionPage.EmbeddedVersion.Equals(
                         OptionPageGrid.PrettierFallbackVersion,
                         StringComparison.Ordinal
@@ -220,7 +223,7 @@ namespace PrettierX64
                     );
                     _executable = Path.Combine(_installDir, PrettierRelativePath);
 
-                    return await InstallEmbeddedPrettierAsync().ConfigureAwait(false);
+                    return await InstallEmbeddedPrettierAsync(isRetry: true).ConfigureAwait(false);
                 }
 
                 Logger.Log("npm install failed.");
@@ -237,7 +240,7 @@ namespace PrettierX64
         {
             if (timeout == null)
             {
-                timeout = TimeSpan.FromMinutes(5);
+                timeout = TimeSpan.FromMinutes(NpmTimeoutMinutes);
             }
 
             // Find npm-cli.js - it's usually in the npm installation
@@ -320,27 +323,33 @@ namespace PrettierX64
         private string FindNpmCliPath()
         {
             // npm-cli.js is typically in: <node_dir>\node_modules\npm\bin\npm-cli.js
-            var process = Process.GetCurrentProcess();
-            string ideDir = Path.GetDirectoryName(process.MainModule.FileName);
+            string ideDir = GetIdeDirectory();
+            if (string.IsNullOrEmpty(ideDir))
+                return null;
 
             // Check VS's bundled node first
             if (Directory.Exists(ideDir))
             {
-                string parent = Directory.GetParent(ideDir).Parent.FullName;
-
-                string[] candidates = new[]
+                // Safely navigate up two directory levels
+                DirectoryInfo ideDirectory = Directory.GetParent(ideDir);
+                if (ideDirectory?.Parent != null)
                 {
-                    Path.Combine(parent, @"Web\External\node_modules\npm\bin\npm-cli.js"),
-                    Path.Combine(
-                        ideDir,
-                        @"Extensions\Microsoft\Web Tools\External\node_modules\npm\bin\npm-cli.js"
-                    ),
-                };
+                    string parent = ideDirectory.Parent.FullName;
 
-                foreach (string candidate in candidates)
-                {
-                    if (File.Exists(candidate))
-                        return candidate;
+                    string[] candidates = new[]
+                    {
+                        Path.Combine(parent, @"Web\External\node_modules\npm\bin\npm-cli.js"),
+                        Path.Combine(
+                            ideDir,
+                            @"Extensions\Microsoft\Web Tools\External\node_modules\npm\bin\npm-cli.js"
+                        ),
+                    };
+
+                    foreach (string candidate in candidates)
+                    {
+                        if (File.Exists(candidate))
+                            return candidate;
+                    }
                 }
             }
 
@@ -411,33 +420,54 @@ namespace PrettierX64
         {
             string path = start.EnvironmentVariables["PATH"] ?? string.Empty;
 
-            var process = Process.GetCurrentProcess();
-            string ideDir = Path.GetDirectoryName(process.MainModule.FileName);
+            string ideDir = GetIdeDirectory();
+            if (string.IsNullOrEmpty(ideDir))
+                return; // Just return early, PATH is already set from start.EnvironmentVariables
 
             if (Directory.Exists(ideDir))
             {
                 var pathsToAdd = new List<string>();
-                string parent = Directory.GetParent(ideDir).Parent.FullName;
-                string rc2Preview1Path = Path.Combine(parent, @"Web\External");
 
-                if (Directory.Exists(rc2Preview1Path))
+                // Safely navigate up two directory levels
+                DirectoryInfo ideDirectory = Directory.GetParent(ideDir);
+                if (ideDirectory?.Parent != null)
                 {
-                    pathsToAdd.Add(rc2Preview1Path);
-                }
-                else
-                {
-                    pathsToAdd.Add(
-                        Path.Combine(ideDir, @"Extensions\Microsoft\Web Tools\External")
-                    );
-                    pathsToAdd.Add(
-                        Path.Combine(ideDir, @"Extensions\Microsoft\Web Tools\External\git")
-                    );
-                }
+                    string parent = ideDirectory.Parent.FullName;
+                    string rc2Preview1Path = Path.Combine(parent, @"Web\External");
 
-                path = $"{path};{string.Join(";", pathsToAdd)}";
+                    if (Directory.Exists(rc2Preview1Path))
+                    {
+                        pathsToAdd.Add(rc2Preview1Path);
+                    }
+                    else
+                    {
+                        pathsToAdd.Add(
+                            Path.Combine(ideDir, @"Extensions\Microsoft\Web Tools\External")
+                        );
+                        pathsToAdd.Add(
+                            Path.Combine(ideDir, @"Extensions\Microsoft\Web Tools\External\git")
+                        );
+                    }
+
+                    path = $"{path};{string.Join(";", pathsToAdd)}";
+                }
             }
 
             start.EnvironmentVariables["PATH"] = path;
+        }
+
+        private static string GetIdeDirectory()
+        {
+            try
+            {
+                var process = Process.GetCurrentProcess();
+                return Path.GetDirectoryName(process.MainModule.FileName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Unable to get IDE directory: {ex.Message}");
+                return null;
+            }
         }
     }
 }

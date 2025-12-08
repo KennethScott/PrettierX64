@@ -8,7 +8,7 @@
   <Commands package="guidPrettierPackage">
     <Groups>
       <Group guid="guidPrettierPackageCmdSet" id="MyMenuGroup" priority="0x0300">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+            <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
       </Group>
     </Groups>
 
@@ -31,6 +31,15 @@
 
   <KeyBindings>
     <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="guidVSStd97"/>
+
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="TypeScriptEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="JavaScriptEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LegacyJavaScriptEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="CSSEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="SCSSEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LESSEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="HTMLEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="JSONEditor"/>
   </KeyBindings>
 
   <Symbols>
@@ -41,5 +50,14 @@
       <IDSymbol name="PrettierCommandId" value="0x0100" />
     </GuidSymbol>
 
+    <GuidSymbol name="TypeScriptEditor" value="{0f2454b1-a556-402d-a7d0-1fde7f99dee0}" />
+    <GuidSymbol name="JavaScriptEditor" value="{14d17961-fe51-464d-9111-c4af11d7d99a}" />
+    <GuidSymbol name="LegacyJavaScriptEditor" value="{8B382828-6202-11d1-8870-0000F87579D2}" />
+    <GuidSymbol name="CSSEditor" value="{64da4034-7123-40a1-9457-418f504221a7}" />
+    <GuidSymbol name="SCSSEditor" value="{d3793f77-fe17-4630-9b48-18e0018d098e}" />
+    <GuidSymbol name="LESSEditor" value="{a2b4b3e8-8a8b-4a55-875f-2c092c730419}" />
+    <GuidSymbol name="HTMLEditor" value="{D3B0F51E-CA89-43a0-A0E0-E6237D2BE87C}" />
+    <GuidSymbol name="JSONEditor" value="{93b6e2ad-86b2-4cd8-8924-f735c0228d4d}" />
   </Symbols>
+  
 </CommandTable>
