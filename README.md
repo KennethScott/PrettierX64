@@ -15,14 +15,20 @@ See the [change log](CHANGELOG.md) for changes and road map.
 
 ## Features
 
-- Prettifies JavaScript, TypeScript, JSON, CSS/SCSS/LESS, HTML, Markdown files
+- Prettifies JavaScript, TypeScript, JSON, CSS/SCSS/LESS, HTML, Markdown, etc.  
 - Uses [Prettier](https://github.com/jlongster/prettier) node module
-    - If a version of Prettier can be found installed via npm locally (relative to the current file), it will be used.
+    - If a version of Prettier can be found installed via npm locally (relative to the current file), it will be used.  This means if you have extensions
+      configured, it will use them and you can add more file types.
     - If no local Prettier installation is found, the extension falls back to an embedded Prettier.
 - Reads the standard [Prettier configuration file](https://prettier.io/docs/en/configuration.html)
 
+## Known Issues/Limitations
+
+- The extension attempts to add a "Make Prettier" option to the right-click context menu in the editor, however this does not currently work 
+  for css/scss/less file types.  Instead please use the Format on Save functionality or the hotkey combo to trigger formatting for these types.
+
 ### Prettify
-This extension calls the [Prettier](https://github.com/jlongster/prettier) node module behind the scenes to format any JavaScript document to its standards.
+This extension calls the [Prettier](https://github.com/jlongster/prettier) node module behind the scenes to format any supported file type to its standards.
 
 For example, take the following code:
 
@@ -49,7 +55,7 @@ foo(
 );
 ```
 
-Invoke the command from the context menu in the JavaScript editor.
+Invoke the command from the context menu in the editor or via hotkey CTRL + K + J.  
 
 ![Context Menu](art/context-menu.png)
 
@@ -74,13 +80,15 @@ Here is an example containing the two most common settings that people want to c
 #### Settings
 Access extension settings within Visual Studio via Tools >>> Options, Prettier.
 
+1. File Extensions to Format
+    * Defaults to js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,yml,yaml
 1. Format on Save
     * If true, run Prettier whenever a JavaScript file is saved.
     * (Try setting to true. This is where the magic happens, instantly snapping your code into place! Never fret with whitespace again!)
 2. Prettier version for embedded usage: 
     * If your solution does not have a local version of Prettier installed via npm, the extension will attempt to download and use the version noted here.
     * Extension will download a requested version once and reuse that now embedded Prettier install until the setting requests another version.
-    * If the version declared cannot be found via npm, the extension will revert to 3.7.3.
+    * If the version declared cannot be found via npm, the extension will revert to 3.7.3.  
 
 #### Can it use my bundled version of Prettier?
 Yes, the plugin will search for a locally (relative to the open file) installed Prettier version before falling back to its own version. 
