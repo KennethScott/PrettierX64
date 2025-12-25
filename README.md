@@ -9,7 +9,8 @@ or get the [CI build](http://vsixgallery.com/extension/J1da7ad9e-85b3-4a0c-8e45-
 
 Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.
 
-This extension was originally forked from Mads Kristensen's JavaScript Prettier.  It was renamed, refactored, and updated for Visual Studio 2022+ x64 compatibility.
+This extension was originally forked from Mads Kristensen's JavaScript Prettier.  It was renamed, refactored, and updated for Visual Studio 2022+ x64 compatibility. It also
+now supports any file types supported by Prettier.
 
 See the [change log](CHANGELOG.md) for changes and road map.
 
@@ -21,11 +22,6 @@ See the [change log](CHANGELOG.md) for changes and road map.
       configured, it will use them and you can add more file types.
     - If no local Prettier installation is found, the extension falls back to an embedded Prettier.
 - Reads the standard [Prettier configuration file](https://prettier.io/docs/en/configuration.html)
-
-## Known Issues/Limitations
-
-- The extension attempts to add a "Make Prettier" option to the right-click context menu in the editor, however this does not currently work 
-  for css/scss/less file types.  Instead please use the Format on Save functionality or the hotkey combo to trigger formatting for these types.
 
 ### Prettify
 This extension calls the [Prettier](https://github.com/jlongster/prettier) node module behind the scenes to format any supported file type to its standards.

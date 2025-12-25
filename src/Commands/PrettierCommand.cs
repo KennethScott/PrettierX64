@@ -93,7 +93,7 @@ namespace PrettierX64
             {
                 _isRunning = true;
 
-                string input = _view.TextBuffer.CurrentSnapshot.GetText();
+                string input = _view.TextDataModel.DocumentBuffer.CurrentSnapshot.GetText();
                 string output = await _node.ExecuteProcessAsync(input, _encoding, _filePath);
 
                 VirtualSnapshotPoint snapshotPoint = _view.Selection.ActivePoint;

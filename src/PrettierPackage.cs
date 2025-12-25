@@ -153,10 +153,10 @@ namespace PrettierX64
         [Category("Prettier")]
         [DisplayName("File extensions to format")]
         [Description(
-            "Comma-separated list of extensions without dots. Example: js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,yml,yaml"
+            "Comma-separated list of extensions without dots. Example: js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,xml,yml,yaml"
         )]
         public string IncludedExtensions { get; set; } =
-            "js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,yml,yaml";
+            "js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,xml,yml,yaml";
 
         // Keep in sync with message below until interpolated strings
         // can be used in the Description.

@@ -8,7 +8,7 @@
   <Commands package="guidPrettierPackage">
     <Groups>
       <Group guid="guidPrettierPackageCmdSet" id="MyMenuGroup" priority="0x0300">
-            <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
       </Group>
     </Groups>
 
@@ -29,17 +29,37 @@
     </Buttons>
   </Commands>
 
+  <CommandPlacements>
+    <CommandPlacement guid="guidPrettierPackageCmdSet" id="MyMenuGroup" priority="0x0300">
+      <Parent guid="guidCSSContext" id="IDM_VS_CTXT_CSS" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidPrettierPackageCmdSet" id="MyMenuGroup" priority="0x0300">
+      <Parent guid="guidHTMLContext" id="IDM_VS_CTXT_HTML" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidPrettierPackageCmdSet" id="MyMenuGroup" priority="0x0300">
+      <Parent guid="guidJSONContext" id="IDM_VS_CTXT_JSON" />
+    </CommandPlacement>
+    <CommandPlacement guid="guidPrettierPackageCmdSet" id="MyMenuGroup" priority="0x0300">
+      <Parent guid="guidWebEditor" id="IDM_VS_CTXT_WEB_EDITOR" />
+    </CommandPlacement>
+  </CommandPlacements>
+
   <KeyBindings>
     <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="guidVSStd97"/>
 
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="TypeScriptEditor"/>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="JavaScriptEditor"/>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LegacyJavaScriptEditor"/>
     <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="CSSEditor"/>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="SCSSEditor"/>
-    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LESSEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="DockerEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="HandlebarsEditor"/>
     <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="HTMLEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="JavaScriptEditor"/>
     <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="JSONEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LegacyJavaScriptEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="LESSEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="MarkdownEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="SCSSEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="TypeScriptEditor"/>           
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="XMLEditor"/>
+    <KeyBinding guid="guidPrettierPackageCmdSet" id="PrettierCommandId" mod1="Control" mod2="Control" key1="K" key2="J" editor="YAMLEditor"/>
   </KeyBindings>
 
   <Symbols>
@@ -50,14 +70,32 @@
       <IDSymbol name="PrettierCommandId" value="0x0100" />
     </GuidSymbol>
 
-    <GuidSymbol name="TypeScriptEditor" value="{0f2454b1-a556-402d-a7d0-1fde7f99dee0}" />
-    <GuidSymbol name="JavaScriptEditor" value="{14d17961-fe51-464d-9111-c4af11d7d99a}" />
-    <GuidSymbol name="LegacyJavaScriptEditor" value="{8B382828-6202-11d1-8870-0000F87579D2}" />
     <GuidSymbol name="CSSEditor" value="{64da4034-7123-40a1-9457-418f504221a7}" />
-    <GuidSymbol name="SCSSEditor" value="{d3793f77-fe17-4630-9b48-18e0018d098e}" />
-    <GuidSymbol name="LESSEditor" value="{a2b4b3e8-8a8b-4a55-875f-2c092c730419}" />
+    <GuidSymbol name="DockerEditor" value="{0F721EE1-5A8E-4444-A0B2-177B5C6C635B}" />
+    <GuidSymbol name="HandlebarsEditor" value="{11A97604-D09D-4158-9A74-1237A8C31D86}" />
     <GuidSymbol name="HTMLEditor" value="{D3B0F51E-CA89-43a0-A0E0-E6237D2BE87C}" />
+    <GuidSymbol name="JavaScriptEditor" value="{14d17961-fe51-464d-9111-c4af11d7d99a}" />
     <GuidSymbol name="JSONEditor" value="{93b6e2ad-86b2-4cd8-8924-f735c0228d4d}" />
+    <GuidSymbol name="LegacyJavaScriptEditor" value="{8B382828-6202-11d1-8870-0000F87579D2}" />
+    <GuidSymbol name="LESSEditor" value="{a2b4b3e8-8a8b-4a55-875f-2c092c730419}" />
+    <GuidSymbol name="MarkdownEditor" value="{2190A507-6B70-4965-8A7E-CDA46F0C6099}" />
+    <GuidSymbol name="SCSSEditor" value="{d3793f77-fe17-4630-9b48-18e0018d098e}" />    
+    <GuidSymbol name="TypeScriptEditor" value="{0f2454b1-a556-402d-a7d0-1fde7f99dee0}" />    
+    <GuidSymbol name="XMLEditor" value="{fa3cf0e1-9173-4973-b461-591a52e692a5}" />
+    <GuidSymbol name="YAMLEditor" value="{82390225-8FF4-4B50-BEC9-E38577D25A97}" />
+    
+    <GuidSymbol name="guidCSSContext" value="{64DA400E-B4AD-4D67-AA92-4B7ACB01ECD5}">
+      <IDSymbol name="IDM_VS_CTXT_CSS" value="0x0002" />
+    </GuidSymbol>
+    <GuidSymbol name="guidHTMLContext" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
+      <IDSymbol name="IDM_VS_CTXT_HTML" value="0x0001" />
+    </GuidSymbol>
+    <GuidSymbol name="guidJSONContext" value="{F718CA06-CF4F-4A0C-9106-E79E9EE5E7CD}">
+      <IDSymbol name="IDM_VS_CTXT_JSON" value="0x0001" />
+    </GuidSymbol>
+    <GuidSymbol name="guidWebEditor" value="{78F03954-2FB8-4087-8CE7-59D71710B3BB}">
+      <IDSymbol name="IDM_VS_CTXT_WEB_EDITOR" value="0x0066" />
+    </GuidSymbol>
   </Symbols>
   
 </CommandTable>

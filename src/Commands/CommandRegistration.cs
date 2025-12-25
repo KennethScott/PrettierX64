@@ -50,7 +50,15 @@ namespace PrettierX64
         {
             IWpfTextView view = AdaptersFactory.GetWpfTextView(textViewAdapter);
 
-            if (!DocumentService.TryGetTextDocument(view.TextBuffer, out ITextDocument doc))
+            // DEBUG: Log the content type to find out what HTML is using
+            Logger.Log($"View Created. ContentType: {view.TextDataModel.ContentType.TypeName}");
+
+            if (
+                !DocumentService.TryGetTextDocument(
+                    view.TextDataModel.DocumentBuffer,
+                    out ITextDocument doc
+                )
+            )
                 return;
 
             PrettierPackage pkg = PrettierPackage.Instance;
