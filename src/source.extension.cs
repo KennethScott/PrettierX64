@@ -12,7 +12,7 @@ namespace PrettierX64
 		public const string Description = @"Prettier is an opinionated code formatter. It enforces a consistent style by parsing your code and re-printing it with its own rules that take the maximum line length into account, wrapping code when necessary.";
 		public const string Language = "en-US";
 		public const string Version = "1.0";
-		public const string Author = "Kenneth Scott";
+		public const string Author = "vs-publisher-126251";
 		public const string Tags = "JavaScript, JSX, EcmaScript, TypeScript, formatting";
     }
 }
