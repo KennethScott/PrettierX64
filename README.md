@@ -79,8 +79,7 @@ Access extension settings within Visual Studio via Tools >>> Options, Prettier.
 1. File Extensions to Format
     * Defaults to js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,yml,yaml
 1. Format on Save
-    * If true, run Prettier whenever a JavaScript file is saved.
-    * (Try setting to true. This is where the magic happens, instantly snapping your code into place! Never fret with whitespace again!)
+    * If true, run Prettier whenever a file of the configured type(s) is saved.
 2. Prettier version for embedded usage: 
     * If your solution does not have a local version of Prettier installed via npm, the extension will attempt to download and use the version noted here.
     * Extension will download a requested version once and reuse that now embedded Prettier install until the setting requests another version.
@@ -90,6 +89,12 @@ Access extension settings within Visual Studio via Tools >>> Options, Prettier.
 Yes, the plugin will search for a locally (relative to the open file) installed Prettier version before falling back to its own version. 
 
 It does ***not*** currently support using a globally installed version of Prettier, and will use its embedded version instead.
+
+#### Troubleshooting
+
+If Prettier isn't formatting your files:
+
+1. **Check the Output Window**: Go to `View > Output`, then select "Prettier x64" from the dropdown. All extension activity and errors are logged here.
 
 ## License
 [Apache 2.0](LICENSE)
