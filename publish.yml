@@ -12,12 +12,39 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+
+      - name: Extract version from tag
+        id: get_version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref }}"
+          $version = $tag -replace 'refs/tags/v', ''
+          Write-Output "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Version: $version"
+      
+      - name: Update version in vsixmanifest
+        shell: pwsh
+        run: |
+          $manifestPath = "src\source.extension.vsixmanifest"
+          [xml]$manifest = Get-Content $manifestPath
+          $manifest.PackageManifest.Metadata.Identity.Version = "${{ steps.get_version.outputs.version }}"
+          $manifest.Save($manifestPath)
+          Write-Host "Updated vsixmanifest to version ${{ steps.get_version.outputs.version }}"
+      
+      - name: Update version in source.extension.cs
+        shell: pwsh
+        run: |
+          $csPath = "src\source.extension.cs"
+          $content = Get-Content $csPath -Raw
+          $content = $content -replace 'Version = "[\d\.]+"', 'Version = "${{ steps.get_version.outputs.version }}"'
+          Set-Content $csPath -Value $content
+          Write-Host "Updated source.extension.cs to version ${{ steps.get_version.outputs.version }}"      
       
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Build and Restore
-        run: msbuild PrettierX64.sln /p:Configuration=Release /p:DeployExtension=False /t:Restore,Build /verbosity:minimal
+      - name: Build
+        run: msbuild PrettierX64.sln /p:Configuration=Release /p:DeployExtension=False /verbosity:minimal
       
       - name: Publish to Visual Studio Marketplace
         uses: mrluje/vs-marketplace-publisher@v2
