@@ -149,10 +149,19 @@ namespace PrettierX64
                     string output = await stdOutTask;
                     string error = await stdErrTask;
 
-                    // Log errors if they exist
+                    if (proc.ExitCode != 0)
+                    {
+                        // Log details and bail out to protect the user's file
+                        Logger.Log(
+                            $"Prettier failed (exit code {proc.ExitCode}) for {Path.GetFileName(filePath)}: {error}"
+                        );
+                        return null;
+                    }
+
+                    // Log non-fatal warnings if they exist but don't stop the return
                     if (!string.IsNullOrEmpty(error))
                     {
-                        Logger.Log($"Prettier Error in {Path.GetFileName(filePath)}: {error}");
+                        Logger.Log($"Prettier warning for {Path.GetFileName(filePath)}: {error}");
                     }
 
                     return output;

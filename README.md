@@ -84,7 +84,7 @@ Access extension settings within Visual Studio via Tools >>> Options, Prettier.
 2. Prettier version for embedded usage: 
     * If your solution does not have a local version of Prettier installed via npm, the extension will attempt to download and use the version noted here.
     * Extension will download a requested version once and reuse that now embedded Prettier install until the setting requests another version.
-    * If the version declared cannot be found via npm, the extension will revert to 3.7.3.  
+    * If the version declared cannot be found via npm, the installation will fail. Check the output window for errors.
 
 #### Can it use my bundled version of Prettier?
 Yes, the plugin will search for a locally (relative to the open file) installed Prettier version before falling back to its own version. 
