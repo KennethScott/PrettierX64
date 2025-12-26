@@ -92,7 +92,8 @@ namespace PrettierX64
                 return null;
             }
 
-            // Call prettier directly instead of via cmd /c
+            // Use 'node' directly; if it's in PATH, Windows finds it.
+            // Otherwise, we can use the full path from GetIdeDirectory().
             var start = new ProcessStartInfo(
                 "node.exe",
                 $"\"{prettierScript}\" --stdin-filepath \"{filePath}\""
@@ -125,40 +126,29 @@ namespace PrettierX64
                         await writer.WriteAsync(input).ConfigureAwait(false);
                     }
 
-                    // Read stdout/stderr concurrently
-                    Task<string> stdOutTask = proc.StandardOutput.ReadToEndAsync();
-                    Task<string> stdErrTask = proc.StandardError.ReadToEndAsync();
-
-                    Task<string[]> completionTask = Task.WhenAll(stdOutTask, stdErrTask);
+                    var stdOutTask = proc.StandardOutput.ReadToEndAsync();
+                    var stdErrTask = proc.StandardError.ReadToEndAsync();
                     var timeoutTask = Task.Delay(TimeSpan.FromSeconds(PrettierTimeoutSeconds));
 
-                    Task finished = await Task.WhenAny(completionTask, timeoutTask)
+                    // Only wait for stdout or the timeout.
+                    var finished = await Task.WhenAny(stdOutTask, timeoutTask)
                         .ConfigureAwait(false);
 
                     if (finished == timeoutTask)
                     {
-                        try
-                        {
-                            if (!proc.HasExited)
-                                proc.Kill();
-                        }
-                        catch
-                        {
-                            // ignore kill failures
-                        }
-
-                        Logger.Log($"Prettier timed out after {PrettierTimeoutSeconds} seconds.");
+                        if (!proc.HasExited)
+                            proc.Kill();
+                        Logger.Log(
+                            $"Prettier timed out for {filePath} after {PrettierTimeoutSeconds} seconds."
+                        );
                         return null;
                     }
 
-                    // Both streams completed
-                    string output = await stdOutTask.ConfigureAwait(false);
-                    string error = await stdErrTask.ConfigureAwait(false);
+                    // If we got here, stdout is done, which means the process is done.
+                    // We can safely await both now without blocking.
+                    string output = await stdOutTask;
+                    string error = await stdErrTask;
 
-                    if (!string.IsNullOrEmpty(error))
-                        Logger.Log(error);
-
-                    // No need to WaitForExit here; streams completing implies process exit
                     return output;
                 }
             }
@@ -322,46 +312,26 @@ namespace PrettierX64
 
         private string FindNpmCliPath()
         {
-            // npm-cli.js is typically in: <node_dir>\node_modules\npm\bin\npm-cli.js
-            string ideDir = GetIdeDirectory();
-            if (string.IsNullOrEmpty(ideDir))
-                return null;
-
-            // Check VS's bundled node first
-            if (Directory.Exists(ideDir))
-            {
-                // Safely navigate up two directory levels
-                DirectoryInfo ideDirectory = Directory.GetParent(ideDir);
-                if (ideDirectory?.Parent != null)
-                {
-                    string parent = ideDirectory.Parent.FullName;
-
-                    string[] candidates = new[]
-                    {
-                        Path.Combine(parent, @"Web\External\node_modules\npm\bin\npm-cli.js"),
-                        Path.Combine(
-                            ideDir,
-                            @"Extensions\Microsoft\Web Tools\External\node_modules\npm\bin\npm-cli.js"
-                        ),
-                    };
-
-                    foreach (string candidate in candidates)
-                    {
-                        if (File.Exists(candidate))
-                            return candidate;
-                    }
-                }
-            }
-
-            // Fallback: try to find npm in PATH
+            // 1. Try to find npm in the system PATH first (KISS)
             string npmCmd = FindExecutableInPath("npm.cmd");
             if (!string.IsNullOrEmpty(npmCmd))
             {
-                // npm.cmd is in <npm_dir>\npm.cmd, npm-cli.js is in <npm_dir>\node_modules\npm\bin\npm-cli.js
                 string npmDir = Path.GetDirectoryName(npmCmd);
                 string cliPath = Path.Combine(npmDir, @"node_modules\npm\bin\npm-cli.js");
                 if (File.Exists(cliPath))
                     return cliPath;
+            }
+
+            // 2. Fallback to the standard VS bundled location
+            string ideDir = GetIdeDirectory();
+            if (!string.IsNullOrEmpty(ideDir))
+            {
+                string bundledPath = Path.Combine(
+                    ideDir,
+                    @"Extensions\Microsoft\Web Tools\External\node_modules\npm\bin\npm-cli.js"
+                );
+                if (File.Exists(bundledPath))
+                    return bundledPath;
             }
 
             return null;

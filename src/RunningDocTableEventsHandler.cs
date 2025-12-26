@@ -61,6 +61,7 @@ namespace PrettierX64
             if (!_package.optionPage.FormatOnSave)
                 return VSConstants.S_OK;
 
+            // 1. Keep the synchronous UI checks fast
             RunningDocumentInfo docInfo = _package._runningDocTable.GetDocumentInfo(docCookie);
 
             IVsTextView vsTextView = GetIVsTextView(docInfo.Moniker);
@@ -71,6 +72,10 @@ namespace PrettierX64
             if (wpfTextView == null)
                 return VSConstants.S_OK;
 
+            // ADD THIS: Check the view properties for the flag
+            if (wpfTextView.Properties.ContainsProperty("PrettierFormatting"))
+                return VSConstants.S_OK;
+
             if (
                 wpfTextView.Properties.TryGetProperty<PrettierCommand>(
                     "prettierCommand",
@@ -78,11 +83,20 @@ namespace PrettierX64
                 )
             )
             {
-                ThreadHelper.JoinableTaskFactory.Run(() => cmd.MakePrettierAsync());
+                // 2. Use RunAsync + FileAndForget to avoid blocking the UI thread
+                _package
+                    .JoinableTaskFactory.RunAsync(async () =>
+                    {
+                        // The command logic itself handles switching to background/foreground
+                        await cmd.MakePrettierAsync();
+                    })
+                    .FileAndForget("PrettierX64/OnBeforeSave");
             }
             else
             {
+#if DEBUG
                 Logger.Log("OnBeforeSave: no PrettierCommand found for this view");
+#endif
             }
 
             return VSConstants.S_OK;

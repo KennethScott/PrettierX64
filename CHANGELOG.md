@@ -8,5 +8,5 @@ on the official Visual Studio extension gallery.
 - [x] Renamed extension from Mads Kristensen's original "JavaScript Prettier" to "Prettier x64" 
 - [x] Updated for Visual Studio 2022 / 2026 x64 compatibility 
 - [x] prettier@latest is now the default if not installed locally
-- [x] Added support for additional content types (JSON, CSS/SCSS/LESS, HTML, Markdown files) 
+- [x] Added support for all Prettier-supported content types (JSON, CSS/SCSS/LESS, HTML, Markdown, etc.) 
 - [x] File extensions to include are now available in settings.
