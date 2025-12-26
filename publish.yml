@@ -1,0 +1,27 @@
+name: Publish Extension
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on tags like v1.0.0, v1.0.1, etc.
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build and Restore
+        run: msbuild PrettierX64.sln /p:Configuration=Release /p:DeployExtension=False /t:Restore,Build /verbosity:minimal
+      
+      - name: Publish to Visual Studio Marketplace
+        uses: mrluje/vs-marketplace-publisher@v2
+        with:
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          manifestPath: publish-manifest.json
+          vsixPath: src/bin/Release/PrettierX64.vsix

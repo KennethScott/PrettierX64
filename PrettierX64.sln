@@ -1,16 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11304.174 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettierX64", "src\PrettierX64.csproj", "{48ead069-033e-4b61-a8c7-a0b264dd3179}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettierX64", "src\PrettierX64.csproj", "{48EAD069-033E-4B61-A8C7-A0B264DD3179}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{c16833fb-d70d-4395-98ef-ccaa818285ef}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C16833FB-D70D-4395-98EF-CCAA818285EF}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		appveyor.yml = appveyor.yml
 		CHANGELOG.md = CHANGELOG.md
+		publish-manifest.json = publish-manifest.json
 		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{43D3D8BC-0C8F-4B4A-8C3D-29EFD72731CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9E76B4BE-1C4A-4BC9-8F88-E49E4447FC78}"
+	ProjectSection(SolutionItems) = preProject
+		publish.yml = publish.yml
 	EndProjectSection
 EndProject
 Global
@@ -19,12 +26,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{48ead069-033e-4b61-a8c7-a0b264dd3179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{48ead069-033e-4b61-a8c7-a0b264dd3179}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{48ead069-033e-4b61-a8c7-a0b264dd3179}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{48ead069-033e-4b61-a8c7-a0b264dd3179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48EAD069-033E-4B61-A8C7-A0B264DD3179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48EAD069-033E-4B61-A8C7-A0B264DD3179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48EAD069-033E-4B61-A8C7-A0B264DD3179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48EAD069-033E-4B61-A8C7-A0B264DD3179}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{43D3D8BC-0C8F-4B4A-8C3D-29EFD72731CC} = {C16833FB-D70D-4395-98EF-CCAA818285EF}
+		{9E76B4BE-1C4A-4BC9-8F88-E49E4447FC78} = {43D3D8BC-0C8F-4B4A-8C3D-29EFD72731CC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E437FAB4-B6B2-4CD8-9142-8A95CDDD1296}
 	EndGlobalSection
 EndGlobal
