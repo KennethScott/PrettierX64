@@ -169,7 +169,7 @@ namespace PrettierX64
         [Description(
             "This extension downloads its own install of Prettier to run if "
                 + "Prettier is not installed via npm in your current project. "
-                + "Leave this set to 'latest' to always use the latest Prettier from npm, "
+                + "Set to 'latest' to always use the latest Prettier from npm, "
                 + "or enter an explicit version such as '3.7.3' to pin the embedded version."
         )]
         public string EmbeddedVersion { get; set; } = PrettierFallbackVersion;

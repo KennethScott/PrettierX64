@@ -62,7 +62,7 @@ namespace PrettierX64
 
             try
             {
-                return await InstallEmbeddedPrettierAsync(isRetry: false).ConfigureAwait(false);
+                return await InstallEmbeddedPrettierAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -126,12 +126,12 @@ namespace PrettierX64
                         await writer.WriteAsync(input).ConfigureAwait(false);
                     }
 
-                    var stdOutTask = proc.StandardOutput.ReadToEndAsync();
-                    var stdErrTask = proc.StandardError.ReadToEndAsync();
+                    Task<string> stdOutTask = proc.StandardOutput.ReadToEndAsync();
+                    Task<string> stdErrTask = proc.StandardError.ReadToEndAsync();
                     var timeoutTask = Task.Delay(TimeSpan.FromSeconds(PrettierTimeoutSeconds));
 
                     // Only wait for stdout or the timeout.
-                    var finished = await Task.WhenAny(stdOutTask, timeoutTask)
+                    Task finished = await Task.WhenAny(stdOutTask, timeoutTask)
                         .ConfigureAwait(false);
 
                     if (finished == timeoutTask)
@@ -149,6 +149,12 @@ namespace PrettierX64
                     string output = await stdOutTask;
                     string error = await stdErrTask;
 
+                    // Log errors if they exist
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        Logger.Log($"Prettier Error in {Path.GetFileName(filePath)}: {error}");
+                    }
+
                     return output;
                 }
             }
@@ -159,64 +165,30 @@ namespace PrettierX64
             }
         }
 
-        private async Task<bool> InstallEmbeddedPrettierAsync(bool isRetry)
+        private async Task<bool> InstallEmbeddedPrettierAsync()
         {
             if (!Directory.Exists(_installDir))
                 Directory.CreateDirectory(_installDir);
 
             // 1. npm init -y
             Logger.Log($"npm init -y (working dir: {_installDir})");
-            (bool Success, _, _) = await RunNpmAsync("init -y").ConfigureAwait(false);
-            if (!Success)
+            (bool success, _, _) = await RunNpmAsync("init -y").ConfigureAwait(false);
+            if (!success)
             {
                 Logger.Log("npm init -y failed.");
                 return false;
             }
 
             // 2. npm install prettier@X
-            Logger.Log($"npm install {Packages} (this can take a few minutes)");
-            (bool Success, string Output, string Error) installResult = await RunNpmAsync(
-                    $"install {Packages}"
-                )
-                .ConfigureAwait(false);
+            Logger.Log($"npm install {Packages}...");
+            (bool Success, _, _) = await RunNpmAsync($"install {Packages}").ConfigureAwait(false);
 
-            if (!installResult.Success)
+            if (!Success)
             {
-                string error = installResult.Error ?? string.Empty;
-
-                // Handle ETARGET (invalid version) by falling back to the default version
-                // Only try this once to prevent infinite recursion
-                if (
-                    !isRetry
-                    && error.Contains("code ETARGET")
-                    && !_package.optionPage.EmbeddedVersion.Equals(
-                        OptionPageGrid.PrettierFallbackVersion,
-                        StringComparison.Ordinal
-                    )
-                )
-                {
-                    Logger.Log(
-                        $"ETARGET detected for version '{_package.optionPage.EmbeddedVersion}'. "
-                            + $"Falling back to '{OptionPageGrid.PrettierFallbackVersion}'."
-                    );
-
-                    _package.optionPage.EmbeddedVersion = OptionPageGrid.PrettierFallbackVersion;
-
-                    // Recompute paths for the fallback version and retry once
-                    _installDir = Path.Combine(
-                        Path.GetTempPath(),
-                        Vsix.Name,
-                        Packages
-                            .Replace(':', '_')
-                            .Replace('@', '_')
-                            .Replace(Path.DirectorySeparatorChar, '_')
-                    );
-                    _executable = Path.Combine(_installDir, PrettierRelativePath);
-
-                    return await InstallEmbeddedPrettierAsync(isRetry: true).ConfigureAwait(false);
-                }
-
-                Logger.Log("npm install failed.");
+                // Log the failure clearly so the user knows their version string is likely the culprit
+                Logger.Log(
+                    $"Prettier installation failed. Check if version '{_package.optionPage.EmbeddedVersion}' is valid."
+                );
                 return false;
             }
 
