@@ -136,6 +136,26 @@ namespace PrettierX64
                 _view.Caret.MoveTo(newSnapshotPoint);
                 _view.ViewScroller.EnsureSpanVisible(new SnapshotSpan(newSnapshotPoint, 0));
 
+                // Re-save using the view properties for the flag
+                if (
+                    _view.TextDataModel.DocumentBuffer.Properties.TryGetProperty(
+                        typeof(ITextDocument),
+                        out ITextDocument doc
+                    )
+                )
+                {
+                    try
+                    {
+                        _view.Properties.AddProperty("PrettierFormatting", true);
+                        await PrettierPackage.Instance.JoinableTaskFactory.SwitchToMainThreadAsync();
+                        doc.Save();
+                    }
+                    finally
+                    {
+                        _view.Properties.RemoveProperty("PrettierFormatting");
+                    }
+                }
+
                 sw.Stop();
                 Logger.Log($"Prettier: formatted '{_filePath}' in {sw.ElapsedMilliseconds} ms.");
 

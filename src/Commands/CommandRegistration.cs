@@ -11,27 +11,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace PrettierX64
 {
     [Export(typeof(IVsTextViewCreationListener))]
-    [ContentType("css")]
-    [ContentType("css.extensions")] // CSS extras
-    [ContentType("Dockerfile")]
-    [ContentType("DockerFileContentType")]
-    [ContentType("handlebars")] // Ember/Handlebars
-    [ContentType("HTML")]
-    [ContentType("InteractiveMarkdown")] // derived from vs-markdown
-    [ContentType("JavaScript")]
-    [ContentType("JSON")]
-    [ContentType("LESS")]
-    [ContentType("Markdown")]
-    [ContentType("McpJson")] // JSON variant
-    [ContentType("mustache")] // Mustache templates
-    [ContentType("SCSS")]
-    [ContentType("SQL Server Tools")]
-    [ContentType("T-SQL90")] // T-SQL editor
-    [ContentType("TypeScript")]
-    [ContentType("underscore")] // JS subtype
-    [ContentType("vs-markdown")]
-    [ContentType("XML")] // via @prettier/plugin-xml or other plugins
-    [ContentType("yaml")]
+    [ContentType("code")] // Covers JS, TS, CSS, JSON, etc.
+    [ContentType("text")] // Covers Markdown, YAML, and fallbacks
     [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
     internal sealed class CommandRegistration : IVsTextViewCreationListener
     {
@@ -50,8 +31,10 @@ namespace PrettierX64
         {
             IWpfTextView view = AdaptersFactory.GetWpfTextView(textViewAdapter);
 
+#if DEBUG
             // DEBUG: Log the content type to find out what HTML is using
             Logger.Log($"View Created. ContentType: {view.TextDataModel.ContentType.TypeName}");
+#endif
 
             if (
                 !DocumentService.TryGetTextDocument(

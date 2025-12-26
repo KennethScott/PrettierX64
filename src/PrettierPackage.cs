@@ -76,8 +76,10 @@ namespace PrettierX64
                     .FileAndForget("PrettierX64/EnsurePrettierInstalled");
             }
 
+#if DEBUG
             // DEV: dump content types to the output window
-            // await DumpContentTypesAsync();
+            await DumpContentTypesAsync();
+#endif
         }
 
         internal void UpdateIncludedExtensions(string raw)
@@ -153,10 +155,10 @@ namespace PrettierX64
         [Category("Prettier")]
         [DisplayName("File extensions to format")]
         [Description(
-            "Comma-separated list of extensions without dots. Example: js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,xml,yml,yaml"
+            "Comma-separated list of extensions without dots. Example: js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,yml,yaml"
         )]
         public string IncludedExtensions { get; set; } =
-            "js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,xml,yml,yaml";
+            "js,jsx,ts,tsx,json,css,scss,less,html,htm,md,markdown,yml,yaml";
 
         // Keep in sync with message below until interpolated strings
         // can be used in the Description.
