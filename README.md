@@ -1,9 +1,8 @@
 # Prettier x64
 
-[![Build status](https://ci.appveyor.com/api/projects/status/t38jbrjn8akd2jla?svg=true)](https://ci.appveyor.com/project/madskristensen/PrettierX64)
+[![Build status](https://ci.appveyor.com/api/projects/status/ygik32a9bco8l2kv?svg=true)](https://ci.appveyor.com/project/kennethscott/prettierx64)
 
-Download this extension from the [Marketplace](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.PrettierX64)
-or get the [CI build](http://vsixgallery.com/extension/J1da7ad9e-85b3-4a0c-8e45-b2ae59a575a7/).
+Download this extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=vs-publisher-126251.PrettierX64)
 
 ---------------------------------------
 
