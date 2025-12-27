@@ -43,6 +43,12 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore PrettierX64.sln
+
       - name: Build
         run: msbuild PrettierX64.sln /p:Configuration=Release /p:DeployExtension=False /verbosity:minimal
       
