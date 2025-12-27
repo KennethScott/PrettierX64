@@ -3,16 +3,11 @@ name: Publish Extension
 env:
   config: Release
   solution: PrettierX64.sln
-  vsixContainer: ${{ github.workspace }}\PrettierX64.vsix
 
 on:
   push:
-    branches:
-      - master
-#on:
-#  push:
-#    tags:
-#     - 'v*'  # Triggers on tags like v1.0.0, v1.0.1, etc.
+    tags:
+    - 'v*'  # Triggers on tags like v1.0.0, v1.0.1, etc.
 
 jobs:
   publish:
@@ -26,9 +21,9 @@ jobs:
         id: get_version
         shell: pwsh
         run: |
-          $tag = "${{ github.ref }}"
-          $version = $tag -replace 'refs/tags/v', ''
-          Write-Output "version=$version" >> $env:GITHUB_OUTPUT
+          $tag = "${{ github.ref_name }}" # e.g., v1.2.3
+          $version = $tag.TrimStart('v')
+          echo "version=$version" >> $env:GITHUB_OUTPUT
           Write-Host "Version: $version"
       
       - name: Update version in vsixmanifest
@@ -49,20 +44,28 @@ jobs:
           Set-Content $csPath -Value $content
           Write-Host "Updated source.extension.cs to version ${{ steps.get_version.outputs.version }}"      
       
-      - name: Add MSBuild to PATH
+      - name: Setup MSBuild & NuGet
         uses: microsoft/setup-msbuild@v2
       - uses: nuget/setup-nuget@v2
+  
+      - name: Install VsixPublisher
+        run: dotnet tool install --global VsixPublisher
 
-      - name: NuGet restore ${{ env.solution }}
+      - name: NuGet restore
         run: nuget restore ${{ env.solution }}
 
-      - name: MSBuild ${{ env.solution }}
-        run: msbuild ${{ env.solution }} /p:Configuration=${{ env.config }} /p:TargetVsixContainer=${{ env.vsixContainer }} /p:DeployExtension=False /verbosity:minimal
+      - name: Build VSIX
+        run: |
+          msbuild ${{ env.solution }} `
+          /p:Configuration=${{ env.config }} `
+          /p:DeployExtension=False `
+          /p:ExtensionInstallationRoot=./output `
+          /p:VsixVersion=${{ steps.get_version.outputs.version }}
       
-      - name: Publish to Visual Studio Marketplace
-        id: publish
-        uses: mrluje/vs-marketplace-publisher@v2
-        with:
-          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
-          manifestPath: publish-manifest.json
-          vsixPath: ${{ env.vsixContainer }}
+      - name: Publish to Marketplace
+        env:
+          VS_TOKEN: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+        run: |
+          # Finds the .vsix in the bin folder and publishes
+          $vsixPath = Get-ChildItem -Path ".\src\bin\Release\*.vsix" | Select-Object -First 1
+          VsixPublisher publish -payload $vsixPath.FullName -publishManifest "publish-manifest.json" -personalAccessToken $env:VS_TOKEN
