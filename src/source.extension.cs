@@ -13,6 +13,6 @@ namespace PrettierX64
 		public const string Language = "en-US";
 		public const string Version = "1.0";
 		public const string Author = "vs-publisher-126251";
-		public const string Tags = "JavaScript, JSX, EcmaScript, TypeScript, formatting";
+		public const string Tags = "JavaScript;JSX;EcmaScript;TypeScript;formatting";
     }
 }

@@ -9,7 +9,7 @@
         <ReleaseNotes>https://github.com/kennethscott/PrettierX64/blob/master/CHANGELOG.md</ReleaseNotes>
         <Icon>Resources\Icon.png</Icon>
         <PreviewImage>Resources\Icon.png</PreviewImage>
-        <Tags>JavaScript, JSX, TypeScript, TSX, EcmaScript, formatting</Tags>
+        <Tags>JavaScript;JSX;TypeScript;TSX;EcmaScript;formatting</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, )">
