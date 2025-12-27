@@ -48,9 +48,6 @@ jobs:
         uses: microsoft/setup-msbuild@v2
       - uses: nuget/setup-nuget@v2
   
-      - name: Install VsixPublisher
-        run: dotnet tool install --global VsixPublisher
-
       - name: NuGet restore
         run: nuget restore ${{ env.solution }}
 
@@ -62,10 +59,17 @@ jobs:
           /p:ExtensionInstallationRoot=./output `
           /p:VsixVersion=${{ steps.get_version.outputs.version }}
       
-      - name: Publish to Marketplace
+      - name: Publish
+        shell: pwsh
         env:
           VS_TOKEN: ${{ secrets.VS_MARKETPLACE_TOKEN }}
         run: |
-          # Finds the .vsix in the bin folder and publishes
-          $vsixPath = Get-ChildItem -Path ".\src\bin\Release\*.vsix" | Select-Object -First 1
-          VsixPublisher publish -payload $vsixPath.FullName -publishManifest "publish-manifest.json" -personalAccessToken $env:VS_TOKEN
+          # Find VsixPublisher.exe
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath
+          $publisher = Join-Path $vsPath "VSSDK\VisualStudioIntegration\Tools\Bin\VsixPublisher.exe"
+          
+          # Find the built VSIX
+          $vsix = Get-ChildItem -Path "**/bin/Release/*.vsix" | Select-Object -First 1
+          
+          # Publish using the official CLI
+          & $publisher publish -payload $vsix.FullName -publishManifest "publish-manifest.json" -personalAccessToken $env:VS_TOKEN
