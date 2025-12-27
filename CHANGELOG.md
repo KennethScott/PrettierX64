@@ -4,7 +4,7 @@
 These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
-## 1.0.1
+## 1.0.4
 - [x] Setup Action for marketplace publishing
 
 ## 1.0
