@@ -25,7 +25,25 @@ jobs:
           $version = $tag.TrimStart('v')
           echo "version=$version" >> $env:GITHUB_OUTPUT
           Write-Host "Version: $version"
-      
+
+      - name: Update Version in Source
+        shell: pwsh
+        run: |
+          $manifestPath = "src/source.extension.vsixmanifest"
+          $csPath = "src/source.extension.cs"
+          
+          # Update XML
+          [xml]$manifest = Get-Content $manifestPath
+          $manifest.PackageManifest.Metadata.Identity.Version = "${{ steps.get_version.outputs.version }}"
+          $manifest.Save($manifestPath)
+          Write-Host "Updated vsixmanifest to version ${{ steps.get_version.outputs.version }}"
+          
+          # Update CS
+          $content = Get-Content $csPath -Raw
+          $content = $content -replace 'Version = "[\d\.]+"', 'Version = "${{ steps.get_version.outputs.version }}"'
+          Set-Content $csPath -Value $content
+          Write-Host "Updated source.extension.cs to version ${{ steps.get_version.outputs.version }}"           
+
       - name: Setup MSBuild & NuGet
         uses: microsoft/setup-msbuild@v2
       - uses: nuget/setup-nuget@v2
