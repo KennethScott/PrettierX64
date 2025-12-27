@@ -20,6 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\publish.yml = .github\workflows\publish.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "art", "art", "{066BE891-49D8-4FEE-B7DD-0D700B77A78F}"
+	ProjectSection(SolutionItems) = preProject
+		art\context-menu.png = art\context-menu.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{43D3D8BC-0C8F-4B4A-8C3D-29EFD72731CC} = {C16833FB-D70D-4395-98EF-CCAA818285EF}
 		{9E76B4BE-1C4A-4BC9-8F88-E49E4447FC78} = {43D3D8BC-0C8F-4B4A-8C3D-29EFD72731CC}
+		{066BE891-49D8-4FEE-B7DD-0D700B77A78F} = {C16833FB-D70D-4395-98EF-CCAA818285EF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E437FAB4-B6B2-4CD8-9142-8A95CDDD1296}
