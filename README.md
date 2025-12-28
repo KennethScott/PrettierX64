@@ -50,10 +50,8 @@ foo(
 
 Invoke the command from the context menu in the editor or via hotkey CTRL + K + J.  
 
-<img src="https://github.com/kennethscott/PrettierX64/raw/master/art/context-menu.png" width="50%" />
+<img src="https://github.com/kennethscott/PrettierX64/raw/master/art/context-menu.png" width="40%" />
 <br/><br/>
-
-### FAQ
 
 #### Configuration via .prettierrc
 It is quite easy to setup Prettier to format a little bit differently, like having 4 spaces instead of 2 spaces per tab. 
