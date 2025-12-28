@@ -1,7 +1,5 @@
 # Prettier x64
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ygik32a9bco8l2kv?svg=true)](https://ci.appveyor.com/project/kennethscott/prettierx64)
-
 Download this extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=vs-publisher-126251.PrettierX64)
 
 ---------------------------------------
@@ -11,7 +9,7 @@ Prettier is an opinionated code formatter. It enforces a consistent style by par
 This extension was originally forked from Mads Kristensen's JavaScript Prettier.  It was renamed, refactored, and updated for Visual Studio 2022+ x64 compatibility. It also
 now supports any file types supported by Prettier.
 
-See the [change log](CHANGELOG.md) for changes and road map.
+See the [change log](https://github.com/kennethscott/PrettierX64/blob/master/CHANGELOG.md) for changes and road map.
 
 ## Features
 
@@ -52,7 +50,8 @@ foo(
 
 Invoke the command from the context menu in the editor or via hotkey CTRL + K + J.  
 
-![Context Menu](art/context-menu.png)
+<img src="https://github.com/kennethscott/PrettierX64/raw/master/art/context-menu.png" width="50%" />
+<br/><br/>
 
 ### FAQ
 

@@ -70,5 +70,12 @@ jobs:
           # Find the built VSIX
           $vsix = Get-ChildItem -Path "src/bin/${{ env.config }}/*.vsix" | Select-Object -First 1
           
+          Write-Host "Publishing VSIX: $($vsix.FullName)"
+
           # Publish using the official CLI
           & $publisher publish -payload $vsix.FullName -publishManifest "publish-manifest.json" -personalAccessToken $env:VS_TOKEN
+
+          # Update the overview separately
+          $readme = Resolve-Path "README.md"
+          Write-Host "Updating overview from: $readme"
+          & $publisher updateOverview -payload $vsix.FullName -overview $readme -personalAccessToken $env:VS_TOKEN
